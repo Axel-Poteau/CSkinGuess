@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body class="d-flex flex-column align-items-center justify-content-center" style="background-image: url('assets/background.png'); background-size: cover; background-repeat: repeat">
+
+<h1 class="mt-4" style="color: lightgray">Devine le skin de Counter-Strike</h1>
+
+<form (ngSubmit)="onFormSubmit()" class="mt-4 w-50 text-center">
+  <mat-form-field class="mb-3 form-field-large w-75">
+    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" placeholder="Recherchez un skin" class="w-75">
+    <mat-autocomplete #auto="matAutocomplete" class="autocomplete-large">
+      <mat-option *ngFor="let option of filteredSkins | async" [value]="option.name">
+        <img [src]="option.image" width="80" height="80" alt="Skin Image"> {{ option.name }} | {{ option.rarity['name']}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <button type="submit" class="btn btn-primary m-2">Envoyer</button>
+</form>
+
+
+<div class="card mt-4 border-0" style="width: 900px; background-color: transparent;">
+  <div class="card-body" style="background-color: transparent;max-height: 400px; overflow-y: auto;">
+    <table class="table" style="background-color: transparent;">
+      <thead>
+      <tr style="color: lightgray">
+        <th scope="col">Skin</th>
+        <th scope="col">Catégorie</th>
+        <th scope="col">Arme</th>
+        <th scope="col">Raretée</th>
+        <th scope="col">Collection</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let skinGuess of skinsGuess">
+        <th scope="row"><img src="{{ skinGuess['image'] }}" width="120px" height="120px"></th>
+        <td style="background-color: {{ correspCat(skinGuess['category']) }}" class="text-center align-middle">{{ skinGuess['category']['name'] }}</td>
+        <td style="background-color: {{ correspWeapon(skinGuess['weapon']) }}" class="text-center align-middle">{{ skinGuess['weapon']['name'] }}</td>
+        <td style="background-color: {{ correspRare(skinGuess['rarity']) }}" class="text-center align-middle">{{ skinGuess['rarity']['name'] }}</td>
+        <td *ngIf="skinGuess['collections'][0]!==undefined" style="background-color: {{ correspCollec(skinGuess['collections'][0]) }}" class="text-center align-middle">{{ skinGuess['collections'][0]['name'] }}</td>
+        <td *ngIf="skinGuess['collections'][0]===undefined" style="background-color: {{ correspCut() }}" class="text-center align-middle"> couteau/gant</td>
+      </tr>
+      </tbody>
+    </table>
+    <a  *ngIf="trouver === true" href="/" class="btn btn-primary m-2">Rejouer</a>
+  </div>
+</div>
+</body>
+</html>
